@@ -16,7 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package test;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,6 +27,8 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import BrickBreaker.Entity.Wall;
 
 
 public class HomeMenu extends JComponent implements MouseListener, MouseMotionListener, ActionListener {
@@ -72,6 +73,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
     
     Image background;
     Image InfoIcon;
+    private Wall wall;
    
    
   
@@ -90,11 +92,13 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         this.owner = owner;
 
 
-        InfoIcon = new ImageIcon("C:\\Users\\vungu\\eclipse-workspace\\CourseWork\\src\\test\\eclamationmark.png").getImage();
+      
         menuFace = new Rectangle(new Point(0,0),area);
         //Get background
         background = new ImageIcon("C:\\Users\\vungu\\eclipse-workspace\\CourseWork\\src\\test\\bbicon.png").getImage();
         this.setPreferredSize(area);    
+        
+     
        
 
         Dimension btnDim = new Dimension(area.width / 4, area.height / 8);
@@ -117,9 +121,6 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
 
     public void paint(Graphics g){
         drawMenu((Graphics2D)g);   	
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.drawOval(400,70,50,50);
-        
     }
 
     public void drawMenu(Graphics2D g2d){
@@ -140,8 +141,10 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         g2d.translate(x,y);
 
         //methods calls
+        drawInfo(g2d);
         drawText(g2d);
         drawButton(g2d);
+      
 
         //end of methods calls
 
@@ -298,11 +301,18 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
             g2d.draw(menuButton);
             g2d.drawString(MENU_TEXT,x,y);
         }
-        Icon icon = UIManager.getIcon("OptionPane.informationIcon");
-        InfoButton= new JButton(icon);
-        InfoButton.setLocation(400,70);      
+  
        
   
+    }
+    public void drawInfo(Graphics2D g2d) {
+        Icon icon = UIManager.getIcon("OptionPane.informationIcon");
+        JButton InfoButton = new JButton(icon);
+        InfoButton.setBounds(400, 70, 50, 50);
+        add(InfoButton);
+        Color tmp = g2d.getColor();
+        g2d.setColor(tmp);
+        
     }
 
     @Override
@@ -315,6 +325,14 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         else if(menuButton.contains(p)){
             System.out.println("Goodbye " + System.getProperty("user.name"));
             System.exit(0);
+        }
+        //option button
+        else if (OptionButton.contains(p)) {
+        	   this.wall = wall;
+        	   
+        }
+        else if(InfoButton.contains(p)) {
+        	
         }
     }
     
@@ -377,7 +395,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
         Point p = mouseEvent.getPoint();
-        if(startButton.contains(p) || menuButton.contains(p))
+        if(startButton.contains(p) || menuButton.contains(p) || OptionButton.contains(p))
             this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         else
             this.setCursor(Cursor.getDefaultCursor());
@@ -387,7 +405,18 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		if(e.getSource()==InfoButton) {
+			JFrame frame = new JFrame();
+			JLabel label = new JLabel("Hello");
+			
+			label.setBounds(0,0,100,50);
+			label.setFont(new Font(null,Font.PLAIN,25));
+			frame.add(label);
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.setSize(420,420);
+			frame.setLayout(null);
+			frame.setVisible(true);
+		}
 		
 	}
 }

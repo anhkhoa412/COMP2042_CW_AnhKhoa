@@ -19,14 +19,20 @@ package test;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
-
-
+import BrickBreaker.Entity.Wall;
 
 public class DebugPanel extends JPanel {
 
-    private static final Color DEF_BKG = Color.WHITE;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
+	private static final Color DEF_BKG = Color.WHITE;
 
 
     private JButton skipLevel;

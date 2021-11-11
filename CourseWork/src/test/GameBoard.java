@@ -19,8 +19,10 @@ package test;
 
 import javax.swing.*;
 
-import ball.Ball;
-import brick.Brick;
+import BrickBreaker.Entity.Ball;
+import BrickBreaker.Entity.Brick;
+import BrickBreaker.Entity.Player;
+import BrickBreaker.Entity.Wall;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -88,9 +90,14 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
                 if(wall.ballEnd()){
                     wall.wallReset();
                     message = "Game over";
+                    wall.CheckScore();
+                    wall.setScore(0);
+                   
+                 
                 }
                 wall.ballReset();
                 gameTimer.stop();
+              
             }
             else if(wall.isDone()){
                 if(wall.hasLevel()){
@@ -99,10 +106,15 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
                     wall.ballReset();
                     wall.wallReset();
                     wall.nextLevel();
+                    wall.CheckScore();
+                    wall.setScore(0);
                 }
                 else{
                     message = "ALL WALLS DESTROYED";
                     gameTimer.stop();
+                    wall.CheckScore();
+                    wall.setScore(0);
+                    
                 }
             }
 
@@ -134,6 +146,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
         drawBall(wall.ball,g2d);
         drawscore(g2d);
+        drawlevel(g2d);
         for(Brick b : wall.bricks)
             if(!b.isBroken())
                 drawBrick(b,g2d);
@@ -144,6 +157,9 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
             drawMenu(g2d);
 
         Toolkit.getDefaultToolkit().sync();
+        if (wall.getHighScore() == ("")) {
+        	wall.setHighScore(wall.GetHighScore());
+        }
     }
 
     private void clear(Graphics2D g2d){
@@ -269,8 +285,15 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     //Draw Score
     public void drawscore(Graphics g) {
     	g.setColor(Color.green);
-    	g.setFont(new Font("serif",Font.BOLD,25));
-    	g.drawString(""+wall.countScore(), 100, 100);
+    	g.setFont(new Font("serif",Font.BOLD,15));
+    	g.drawString("Score: "+wall.countScore(), 0, 100);
+    	g.drawString("Highscore: "+wall.GetHighScore(),0,125);
+    }
+    
+    public void drawlevel(Graphics g) {
+    	g.setColor(Color.green);
+    	g.setFont(new Font("serif",Font.BOLD,15));
+    	g.drawString("Level: "+wall.getlevel(), 500, 100);
     	
     }
     @Override

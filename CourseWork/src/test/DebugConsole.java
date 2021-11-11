@@ -19,7 +19,8 @@ package test;
 
 import javax.swing.*;
 
-import ball.Ball;
+import BrickBreaker.Entity.Ball;
+import BrickBreaker.Entity.Wall;
 
 import java.awt.*;
 import java.awt.event.WindowEvent;
