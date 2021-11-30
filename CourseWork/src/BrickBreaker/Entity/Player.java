@@ -35,15 +35,20 @@ public class Player {
     private int moveAmount;
     private int min;
     private int max;
+    private int score;
 
 
-    public Player(Point ballPoint,int width,int height,Rectangle container) {
+    public Player(Point ballPoint,int width,int height,Rectangle container, int score) {
         this.ballPoint = ballPoint;
         moveAmount = 0;
         playerFace = makeRectangle(width, height);
         min = container.x + (width / 2);
         max = min + container.width - width;
+        this.setScore(score);
 
+    }
+    public void addscore() {
+    	setScore(getScore() + 5);
     }
 
     private Rectangle makeRectangle(int width,int height){
@@ -83,5 +88,11 @@ public class Player {
         ballPoint.setLocation(p);
         playerFace.setLocation(ballPoint.x - (int)playerFace.getWidth()/2,ballPoint.y);
     }
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
     }
 

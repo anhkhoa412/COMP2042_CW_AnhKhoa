@@ -53,7 +53,9 @@ public class Wall {
     private int ballCount;
     private boolean ballLost;
     
-    private int score;
+ 
+    
+
     private String highScore = "Nobody:0";
 
     public Wall(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos){
@@ -79,7 +81,7 @@ public class Wall {
 
         ball.setSpeed(speedX,speedY);
 
-        player = new Player((Point) ballPos.clone(),150,10, drawArea);
+        player = new Player((Point) ballPos.clone(),150,10,drawArea,0);
 
         area = drawArea;
 
@@ -208,7 +210,7 @@ public class Wall {
             * because for every brick program checks for horizontal and vertical impacts
             */
             brickCount--;
-            score += 5;
+            player.addscore();
         }
         else if(impactBorder()) {
             ball.reverseX();
@@ -314,7 +316,7 @@ public class Wall {
     }
     //count score
     public  int countScore() {
-    return score;
+    return player.getScore();
     }
     //get highscore
     public String GetHighScore()  {
@@ -324,11 +326,11 @@ public class Wall {
     	try {
     		readFile = new FileReader("highscore.dat");
     		reader = new BufferedReader(readFile);
-    		return reader.readLine();
+    		return highScore = reader.readLine();
     	}
     	catch (Exception e)
     	{
-    		return "Nobody:0";
+    		return highScore = "Nobody:0";
     	}
     	finally 
     	{
@@ -341,10 +343,13 @@ public class Wall {
     	}
 }
     public void CheckScore() {
-    	if (score > Integer.parseInt((highScore.split(":")[1]))) {
+    	checkpreviosscore();
+    	if (player.getScore() > Integer.parseInt((highScore.split(":")[1]))) {
     		
     		String name = JOptionPane.showInputDialog("You set a new highScore. What your name?");
-    		highScore = name + ":" + score;
+    		highScore = name + ":" + player.getScore();
+    		ScoreManager sm = new ScoreManager(name, player.getScore());
+    		
     		
     		File scoreFile = new File("highscore.dat");
     		if (!scoreFile.exists()) {
@@ -391,14 +396,11 @@ public class Wall {
         }
         return  out;
     }
-
-	public int getScore() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
-	}
+    
+    public int  checkpreviosscore() {
+    	return player.getScore();
+    }
+	
 
 	public String getHighScore() {
 		return highScore;
