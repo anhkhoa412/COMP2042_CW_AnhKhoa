@@ -18,10 +18,10 @@
 package BrickBreaker.test;
 
 import javax.swing.*;
-import BrickBreaker.Menu.GameBoard;
 
-import BrickBreaker.Entity.Ball;
-import BrickBreaker.Entity.Wall;
+import com.brickbreaker.controller.GameBoard;
+import com.brickbreaker.controller.Wall;
+import com.brickbreaker.model.Ball;
 
 import java.awt.*;
 import java.awt.event.WindowEvent;
