@@ -21,6 +21,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeListener;
 
 import com.brickbreaker.controller.Wall;
+import com.brickbreaker.model.levels;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -43,6 +44,7 @@ public class DebugPanel extends JPanel {
     private JSlider ballYSpeed;
 
     private Wall wall;
+    private levels level;
 
     public DebugPanel(Wall wall){
 
@@ -50,7 +52,7 @@ public class DebugPanel extends JPanel {
 
         initialize();
 
-        skipLevel = makeButton("Skip Level",e -> wall.nextLevel());
+        skipLevel = makeButton("Skip Level",e -> level.nextLevel());
         resetBalls = makeButton("Reset Balls",e -> wall.resetBallCount());
 
         ballXSpeed = makeSlider(-4,4,e -> wall.setBallXSpeed(ballXSpeed.getValue()));

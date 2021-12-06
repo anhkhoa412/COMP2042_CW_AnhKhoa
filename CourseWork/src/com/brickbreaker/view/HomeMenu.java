@@ -33,6 +33,7 @@ import com.brickbreaker.controller.ScoreManager;
 import com.brickbreaker.controller.Wall;
 import com.brickbreaker.model.HighScore;
 import com.brickbreaker.model.Player;
+import com.brickbreaker.model.Score;
 
 
 public class HomeMenu extends JComponent implements MouseListener, MouseMotionListener, ActionListener {
@@ -79,6 +80,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
     Image InfoIcon;
     private Wall wall;
     public Player player;
+    public Score score;
    
    
   
@@ -102,7 +104,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
        
         menuFace = new Rectangle(new Point(0,0),area);
         //Get background
-        background = new ImageIcon("C:\\Users\\vungu\\eclipse-workspace\\CourseWork\\pictures\\bbicon.png").getImage();
+        background = new ImageIcon("C:\\Users\\vungu\\eclipse-workspace\\CourseWork\\res\\pictures\\bbicon.png").getImage();
         this.setPreferredSize(area);
         
         
@@ -357,8 +359,9 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         }
         //HighScore button
         else if (HighScoreButton.contains(p)) {
-        	  ScoreViews Sv = new ScoreViews();
-              Sv.initialize();
+        	JFrame frame = new JFrame();
+        	   wall.checkpreviosscore();
+        	  JOptionPane.showMessageDialog(frame,"HighsScore:" +wall.getHighScore());
         	
         }
    

@@ -34,6 +34,7 @@ import com.brickbreaker.model.CementBrick;
 import com.brickbreaker.model.ClayBrick;
 import com.brickbreaker.model.Player;
 import com.brickbreaker.model.RubberBall;
+import com.brickbreaker.model.Score;
 import com.brickbreaker.model.SteelBrick;
 
 
@@ -59,10 +60,8 @@ public class Wall {
     private int brickCount;
     private int ballCount;
     private boolean ballLost;
-    
+    public Score score;
  
-    
-
     private String highScore = "Nobody:0";
 
     public Wall(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos){
@@ -88,9 +87,11 @@ public class Wall {
 
         ball.setSpeed(speedX,speedY);
 
-        player = new Player((Point) ballPos.clone(),150,10,drawArea,0);
+        player = new Player((Point) ballPos.clone(),150,10,drawArea,null,0);
 
         area = drawArea;
+        
+
 
 
     }
@@ -219,9 +220,11 @@ public class Wall {
         }
         else if(impactBorder()) {
             ball.reverseX();
+            
         }
         else if(ball.getPosition().getY() < area.getY()){
             ball.reverseY();
+       
         }
         else if(ball.getPosition().getY() > area.getY() + area.getHeight()){
             ballCount--;
@@ -348,13 +351,11 @@ public class Wall {
     	}
 }
     public void CheckScore() {
-    	checkpreviosscore();
     	if (player.getScore() > Integer.parseInt((highScore.split(":")[1]))) {
     		
     		String name = JOptionPane.showInputDialog("You set a new highScore. What your name?");
     		highScore = name + ":" + player.getScore();
-    		ScoreManager sm = new ScoreManager(name, player.getScore());
-    		
+    		name = player.getName();
     		
     		File scoreFile = new File("highscore.dat");
     		if (!scoreFile.exists()) {
@@ -367,8 +368,9 @@ public class Wall {
     		FileWriter writeFile = null;
     		BufferedWriter writer = null;
     		try {
-    			writeFile = new FileWriter(scoreFile);
+    			writeFile = new FileWriter(scoreFile, true);
     			writer = new BufferedWriter(writeFile);
+    			writer.newLine();
     			writer.write(this.highScore);
     		}
     		catch (Exception e) {

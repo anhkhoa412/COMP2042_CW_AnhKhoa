@@ -35,10 +35,11 @@ public class Player {
     private int moveAmount;
     private int min;
     private int max;
+    private String name;
     private int score;
 
 
-    public Player(Point ballPoint,int width,int height,Rectangle container, int score) {
+    public Player(Point ballPoint,int width,int height,Rectangle container,String name, int score) {
         this.ballPoint = ballPoint;
         moveAmount = 0;
         playerFace = makeRectangle(width, height);
@@ -93,6 +94,12 @@ public class Player {
 	}
 	public void setScore(int score) {
 		this.score = score;
+	}
+	public String getName() {
+		return name;
+	}
+	public String setName(String name) {
+		return this.name = name;
 	}
     }
 
