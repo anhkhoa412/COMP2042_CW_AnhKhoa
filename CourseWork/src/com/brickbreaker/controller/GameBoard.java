@@ -21,6 +21,7 @@ import javax.swing.*;
 
 import com.brickbreaker.model.Ball;
 import com.brickbreaker.model.HighScore;
+import com.brickbreaker.model.Level;
 import com.brickbreaker.model.Player;
 import com.brickbreaker.model.Sound;
 import com.brickbreaker.view.ScoreViews;
@@ -68,6 +69,8 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
   
     private HighScore hc;
     
+    private Level level;
+    
     Sound sound = new Sound();
     
 
@@ -89,11 +92,12 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
        
         
         message = "";
-        wall = new Wall(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),30,3,6/2,new Point(300,430));
+        wall = new Wall(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),new Point(300,430));
+        level = new Level(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),30,3, 3, wall);
 
         debugConsole = new DebugConsole(owner,wall,this);
         //initialize the first level
-        wall.nextLevel();
+        level.nextLevel();
 
         gameTimer = new Timer(10,e ->{
             wall.move();

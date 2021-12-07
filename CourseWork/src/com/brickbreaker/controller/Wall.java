@@ -37,377 +37,246 @@ import com.brickbreaker.model.RubberBall;
 import com.brickbreaker.model.Score;
 import com.brickbreaker.model.SteelBrick;
 
-
 public class Wall {
 
-    private static final int LEVELS_COUNT = 4;
 
-    private static final int CLAY = 1;
-    private static final int STEEL = 2;
-    private static final int CEMENT = 3;
+	private Random rnd;
+	private Rectangle area;
 
-    private Random rnd;
-    private Rectangle area;
+	public Brick[] bricks;
+	public Ball ball;
+	public Player player;
 
-    public Brick[] bricks;
-    public Ball ball;
-    public Player player;
+	private Brick[][] levels;
+	private int level;
 
-    private Brick[][] levels;
-    private int level;
+	private Point startPoint;
+	private int brickCount;
+	private int ballCount;
+	private boolean ballLost;
+	public Score score;
 
-    private Point startPoint;
-    private int brickCount;
-    private int ballCount;
-    private boolean ballLost;
-    public Score score;
- 
-    private String highScore = "Nobody:0";
+	private String highScore = "Nobody:0";
 
-    public Wall(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos){
+	public Wall(Rectangle drawArea,  Point ballPos) {
 
-        this.startPoint = new Point(ballPos);
+		this.startPoint = new Point(ballPos);
 
-        levels = makeLevels(drawArea,brickCount,lineCount,brickDimensionRatio);
-        level = 0;
+		ballCount = 3;
+		ballLost = false;
 
-        ballCount = 3;
-        ballLost = false;
+		rnd = new Random();
 
-        rnd = new Random();
+		makeBall(ballPos);
+		int speedX, speedY;
+		do {
+			speedX = rnd.nextInt(5) - 2;
+		} while (speedX == 0);
+		do {
+			speedY = -rnd.nextInt(3);
+		} while (speedY == 0);
 
-        makeBall(ballPos);
-        int speedX,speedY;
-        do{
-            speedX = rnd.nextInt(5) - 2;
-        }while(speedX == 0);
-        do{
-            speedY = -rnd.nextInt(3);
-        }while(speedY == 0);
+		ball.setSpeed(speedX, speedY);
 
-        ball.setSpeed(speedX,speedY);
+		player = new Player((Point) ballPos.clone(), 150, 10, drawArea, null, 0);
 
-        player = new Player((Point) ballPos.clone(),150,10,drawArea,null,0);
+		area = drawArea;
 
-        area = drawArea;
-        
+	}
 
+	private void makeBall(Point2D ballPos) {
+		ball = new RubberBall(ballPos);
+	}
 
+	public void checkLevels() {
+		if (level == 1) {
 
-    }
+		}
 
-    private Brick[] makeSingleTypeLevel(Rectangle drawArea, int brickCnt, int lineCnt, double brickSizeRatio, int type){
-        /*
-          if brickCount is not divisible by line count,brickCount is adjusted to the biggest
-          multiple of lineCount smaller then brickCount
-         */
-        brickCnt -= brickCnt % lineCnt;
+	}
 
-        int brickOnLine = brickCnt / lineCnt;
+	public void move() {
+		player.move();
+		ball.move();
+	}
 
-        double brickLen = drawArea.getWidth() / brickOnLine;
-        double brickHgt = brickLen / brickSizeRatio;
+	public void findImpacts() {
+		if (player.impact(ball)) {
+			ball.reverseY();
+		} else if (impactWall()) {
+			/*
+			 * for efficiency reverse is done into method impactWall because for every brick
+			 * program checks for horizontal and vertical impacts
+			 */
+			brickCount--;
+			player.addscore();
+		} else if (impactBorder()) {
+			ball.reverseX();
 
-        brickCnt += lineCnt / 2;
+		} else if (ball.getPosition().getY() < area.getY()) {
+			ball.reverseY();
 
-        Brick[] tmp  = new Brick[brickCnt];
+		} else if (ball.getPosition().getY() > area.getY() + area.getHeight()) {
+			ballCount--;
+			ballLost = true;
+		}
+	}
 
-        Dimension brickSize = new Dimension((int) brickLen,(int) brickHgt);
-        Point p = new Point();
+	private boolean impactWall() {
+		for (Brick b : bricks) {
+			switch (b.findImpact(ball)) {
+			// Vertical Impact
+			case Brick.UP_IMPACT:
+				ball.reverseY();
+				return b.setImpact(ball.down, Brick.Crack.UP);
+			case Brick.DOWN_IMPACT:
+				ball.reverseY();
+				return b.setImpact(ball.up, Brick.Crack.DOWN);
 
-        int i;
-        for(i = 0; i < tmp.length; i++){
-            int line = i / brickOnLine;
-            if(line == lineCnt)
-                break;
-            double x = (i % brickOnLine) * brickLen;
-            x =(line % 2 == 0) ? x : (x - (brickLen / 2));
-            double y = (line) * brickHgt;
-            p.setLocation(x,y);
-            tmp[i] = makeBrick(p,brickSize,type);
-        }
+			// Horizontal Impact
+			case Brick.LEFT_IMPACT:
+				ball.reverseX();
+				return b.setImpact(ball.right, Brick.Crack.RIGHT);
+			case Brick.RIGHT_IMPACT:
+				ball.reverseX();
+				return b.setImpact(ball.left, Brick.Crack.LEFT);
+			}
+		}
+		return false;
+	}
 
-        for(double y = brickHgt;i < tmp.length;i++, y += 2*brickHgt){
-            double x = (brickOnLine * brickLen) - (brickLen / 2);
-            p.setLocation(x,y);
-            tmp[i] = new ClayBrick(p,brickSize);
-        }
-        return tmp;
+	private boolean impactBorder() {
+		Point2D p = ball.getPosition();
+		return ((p.getX() < area.getX()) || (p.getX() > (area.getX() + area.getWidth())));
+	}
 
-    }
+	public int getBrickCount() {
+		return brickCount;
+	}
 
-    private Brick[] makeChessboardLevel(Rectangle drawArea, int brickCnt, int lineCnt, double brickSizeRatio, int typeA, int typeB){
-        /*
-          if brickCount is not divisible by line count,brickCount is adjusted to the biggest
-          multiple of lineCount smaller then brickCount
-         */
-        brickCnt -= brickCnt % lineCnt;
+	public int getBallCount() {
+		return ballCount;
+	}
 
-        int brickOnLine = brickCnt / lineCnt;
+	public boolean isBallLost() {
+		return ballLost;
+	}
 
-        int centerLeft = brickOnLine / 2 - 1;
-        int centerRight = brickOnLine / 2 + 1;
+	public void ballReset() {
+		player.moveTo(startPoint);
+		ball.moveTo(startPoint);
+		int speedX, speedY;
+		do {
+			speedX = rnd.nextInt(5) - 2;
+		} while (speedX == 0);
+		do {
+			speedY = -rnd.nextInt(3);
+		} while (speedY == 0);
 
-        double brickLen = drawArea.getWidth() / brickOnLine;
-        double brickHgt = brickLen / brickSizeRatio;
+		ball.setSpeed(speedX, speedY);
+		ballLost = false;
+	}
 
-        brickCnt += lineCnt / 2;
+	public void wallReset() {
+		for (Brick b : bricks)
+			b.repair();
+		brickCount = bricks.length;
+		ballCount = 3;
+	}
 
-        Brick[] tmp  = new Brick[brickCnt];
+	public boolean ballEnd() {
+		return ballCount == 0;
+	}
 
-        Dimension brickSize = new Dimension((int) brickLen,(int) brickHgt);
-        Point p = new Point();
+	public boolean isDone() {
+		return brickCount == 0;
+	}
 
-        int i;
-        for(i = 0; i < tmp.length; i++){
-            int line = i / brickOnLine;
-            if(line == lineCnt)
-                break;
-            int posX = i % brickOnLine;
-            double x = posX * brickLen;
-            x =(line % 2 == 0) ? x : (x - (brickLen / 2));
-            double y = (line) * brickHgt;
-            p.setLocation(x,y);
+	public void nextLevel() {
+		bricks = levels[level++];
+		this.brickCount = bricks.length;
+	}
 
-            boolean b = ((line % 2 == 0 && i % 2 == 0) || (line % 2 != 0 && posX > centerLeft && posX <= centerRight));
-            tmp[i] = b ?  makeBrick(p,brickSize,typeA) : makeBrick(p,brickSize,typeB);
-        }
+	public boolean hasLevel() {
+		return level < levels.length;
+	}
 
-        for(double y = brickHgt;i < tmp.length;i++, y += 2*brickHgt){
-            double x = (brickOnLine * brickLen) - (brickLen / 2);
-            p.setLocation(x,y);
-            tmp[i] = makeBrick(p,brickSize,typeA);
-        }
-        return tmp;
-    }
+	public void setBallXSpeed(int s) {
+		ball.setXSpeed(s);
+	}
 
-    private void makeBall(Point2D ballPos){
-        ball = new RubberBall(ballPos);
-    }
+	public void setBallYSpeed(int s) {
+		ball.setYSpeed(s);
+	}
 
-    private Brick[][] makeLevels(Rectangle drawArea,int brickCount,int lineCount,double brickDimensionRatio){
-        Brick[][] tmp = new Brick[LEVELS_COUNT][];
-        tmp[0] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY);
-        tmp[1] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,CEMENT);
-        tmp[2] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,STEEL);
-        tmp[3] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,STEEL,CEMENT);
-        return tmp;
-    }
-    public void checkLevels() {
-    	   if (level == 1) { 
-    		   
-    	   }
-    	
-    	
-    	
-    }
+	public void resetBallCount() {
+		ballCount = 3;
+	}
 
-    public void move(){
-        player.move();
-        ball.move();
-    }
+	// count score
+	public int countScore() {
+		return player.getScore();
+	}
 
-    public void findImpacts(){
-        if(player.impact(ball)){
-            ball.reverseY();
-        }
-        else if(impactWall()){
-            /*for efficiency reverse is done into method impactWall
-            * because for every brick program checks for horizontal and vertical impacts
-            */
-            brickCount--;
-            player.addscore();
-        }
-        else if(impactBorder()) {
-            ball.reverseX();
-            
-        }
-        else if(ball.getPosition().getY() < area.getY()){
-            ball.reverseY();
-       
-        }
-        else if(ball.getPosition().getY() > area.getY() + area.getHeight()){
-            ballCount--;
-            ballLost = true;
-        }
-    }
+	// get highscore
+	public String GetHighScore() {
+		// format: Khoa: 100
+		FileReader readFile = null;
+		BufferedReader reader = null;
+		try {
+			readFile = new FileReader("highscore.dat");
+			reader = new BufferedReader(readFile);
+			return highScore = reader.readLine();
+		} catch (Exception e) {
+			return highScore = "Nobody:0";
+		} finally {
+			try {
+				if (reader != null)
+					reader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-    private boolean impactWall(){
-        for(Brick b : bricks){
-            switch(b.findImpact(ball)) {
-                //Vertical Impact
-                case Brick.UP_IMPACT:
-                    ball.reverseY();
-                    return b.setImpact(ball.down, Brick.Crack.UP);
-                case Brick.DOWN_IMPACT:
-                    ball.reverseY();
-                    return b.setImpact(ball.up,Brick.Crack.DOWN);
+	public void CheckScore() {
+		if (player.getScore() > Integer.parseInt((highScore.split(":")[1]))) {
 
-                //Horizontal Impact
-                case Brick.LEFT_IMPACT:
-                    ball.reverseX();
-                    return b.setImpact(ball.right,Brick.Crack.RIGHT);
-                case Brick.RIGHT_IMPACT:
-                    ball.reverseX();
-                    return b.setImpact(ball.left,Brick.Crack.LEFT);
-            }
-        }
-        return false;
-    }
+			String name = JOptionPane.showInputDialog("You set a new highScore. What your name?");
+			highScore = name + ":" + player.getScore();
+			name = player.getName();
 
-    private boolean impactBorder(){
-        Point2D p = ball.getPosition();
-        return ((p.getX() < area.getX()) ||(p.getX() > (area.getX() + area.getWidth())));
-    }
+			File scoreFile = new File("highscore.dat");
+			if (!scoreFile.exists()) {
+				try {
+					scoreFile.createNewFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			FileWriter writeFile = null;
+			BufferedWriter writer = null;
+			try {
+				writeFile = new FileWriter(scoreFile, true);
+				writer = new BufferedWriter(writeFile);
+				writer.newLine();
+				writer.write(this.highScore);
+			} catch (Exception e) {
 
-    public int getBrickCount(){
-        return brickCount;
-    }
+			} finally {
+				try {
+					if (writer != null)
+						writer.close();
+				} catch (Exception e) {
+				}
 
-    public int getBallCount(){
-        return ballCount;
-    }
+			}
+		}
+	}
 
-    public boolean isBallLost(){
-        return ballLost;
-    }
-
-    public void ballReset(){
-        player.moveTo(startPoint);
-        ball.moveTo(startPoint);
-        int speedX,speedY;
-        do{
-            speedX = rnd.nextInt(5) - 2;
-        }while(speedX == 0);
-        do{
-            speedY = -rnd.nextInt(3);
-        }while(speedY == 0);
-
-        ball.setSpeed(speedX,speedY);
-        ballLost = false;
-    }
-
-    public void wallReset(){
-        for(Brick b : bricks)
-            b.repair();
-        brickCount = bricks.length;
-        ballCount = 3;
-    }
-
-    public boolean ballEnd(){
-        return ballCount == 0;
-    }
-
-    public boolean isDone(){
-        return brickCount == 0;
-    }
-
-    public void nextLevel(){
-        bricks = levels[level++];
-        this.brickCount = bricks.length;
-    }
-
-    public boolean hasLevel(){
-        return level < levels.length;
-    }
-
-    public void setBallXSpeed(int s){
-        ball.setXSpeed(s);
-    }
-
-    public void setBallYSpeed(int s){
-        ball.setYSpeed(s);
-    }
-
-    public void resetBallCount(){
-        ballCount = 3;
-    }
-    //count score
-    public  int countScore() {
-    return player.getScore();
-    }
-    //get highscore
-    public String GetHighScore()  {
-    	//format:  Khoa: 100
-    	FileReader readFile = null;
-    	BufferedReader reader = null;
-    	try {
-    		readFile = new FileReader("highscore.dat");
-    		reader = new BufferedReader(readFile);
-    		return highScore = reader.readLine();
-    	}
-    	catch (Exception e)
-    	{
-    		return highScore = "Nobody:0";
-    	}
-    	finally 
-    	{
-    		try {
-    			if (reader != null)
-    				reader.close();
-    	} catch (IOException e) {
-    		e.printStackTrace();
-    	}
-    	}
-}
-    public void CheckScore() {
-    	if (player.getScore() > Integer.parseInt((highScore.split(":")[1]))) {
-    		
-    		String name = JOptionPane.showInputDialog("You set a new highScore. What your name?");
-    		highScore = name + ":" + player.getScore();
-    		name = player.getName();
-    		
-    		File scoreFile = new File("highscore.dat");
-    		if (!scoreFile.exists()) {
-    			try {
-    			scoreFile.createNewFile();
-    		} catch (IOException e) {
-    			e.printStackTrace();
-    		}
-    		}
-    		FileWriter writeFile = null;
-    		BufferedWriter writer = null;
-    		try {
-    			writeFile = new FileWriter(scoreFile, true);
-    			writer = new BufferedWriter(writeFile);
-    			writer.newLine();
-    			writer.write(this.highScore);
-    		}
-    		catch (Exception e) {
-    			
-    		}
-    		finally {
-    		try {
-    			if (writer != null)
-    				writer.close();
-    		}
-    		catch (Exception e) {}
-    			
-    		}
-    	}
-    }
-    private Brick makeBrick(Point point, Dimension size, int type){
-        Brick out;
-        switch(type){
-            case CLAY:
-                out = new ClayBrick(point,size);
-                break;
-            case STEEL:
-                out = new SteelBrick(point,size);
-                break;
-            case CEMENT:
-                out = new CementBrick(point, size);
-                break;
-            default:
-                throw  new IllegalArgumentException(String.format("Unknown Type:%d\n",type));
-        }
-        return  out;
-    }
-    
-    public int  checkpreviosscore() {
-    	return player.getScore();
-    }
-	
+	public int checkpreviosscore() {
+		return player.getScore();
+	}
 
 	public String getHighScore() {
 		return highScore;
@@ -421,5 +290,18 @@ public class Wall {
 		// TODO Auto-generated method stub
 		return level;
 	}
+
+	public Brick[] getBricks() {
+		return bricks;
+	}
+
+	public void setBricks(Brick[] bricks) {
+		this.bricks = bricks;
+	}
+
+	public void setBrickCount(int brickCount) {
+		this.brickCount = brickCount;
+	}
+	
 
 }
