@@ -20,11 +20,10 @@ package com.brickbreaker.controller;
 import javax.swing.*;
 
 import com.brickbreaker.model.Ball;
-import com.brickbreaker.model.HighScore;
 import com.brickbreaker.model.Level;
 import com.brickbreaker.model.Player;
 import com.brickbreaker.model.Sound;
-import com.brickbreaker.view.ScoreViews;
+
 
 import BrickBreaker.test.DebugConsole;
 import java.awt.*;
@@ -67,7 +66,6 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     
     private Player player;
   
-    private HighScore hc;
     
     private Level level;
     
@@ -95,9 +93,11 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         wall = new Wall(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),new Point(300,430));
         level = new Level(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),30,3, 3, wall);
 
-        debugConsole = new DebugConsole(owner,wall,this);
+        debugConsole = new DebugConsole(owner,wall,this,level);
+        
         //initialize the first level
         level.nextLevel();
+       
 
         gameTimer = new Timer(10,e ->{
             wall.move();
@@ -108,9 +108,6 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
                     wall.wallReset();
                     message = "Game over";
                     wall.CheckScore();
-
-             
-                   
                  
                 }
                 wall.ballReset();
@@ -118,13 +115,14 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
               
             }
             else if(wall.isDone()){
-                if(wall.hasLevel()){
+                if(level.hasLevel()){
                     message = "Go to Next Level";
                     gameTimer.stop();
                     wall.ballReset();
                     wall.wallReset();
-                    wall.nextLevel();
+                    level.nextLevel();
                     wall.CheckScore();
+                    wall.levelup();
                 
                 }
                 else{
@@ -217,11 +215,9 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
     private void drawPlayer(Player p,Graphics2D g2d){
         Color tmp = g2d.getColor();
-
         Shape s = p.getPlayerFace();
         g2d.setColor(Player.INNER_COLOR);
         g2d.fill(s);
-
         g2d.setColor(Player.BORDER_COLOR);
         g2d.draw(s);
 
@@ -312,7 +308,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     public void drawlevel(Graphics g) {
     	g.setColor(Color.green);
     	g.setFont(new Font("serif",Font.BOLD,15));
-    	g.drawString("Level: "+wall.getlevel(), 500, 100);
+    	g.drawString("Level: "+level.getLevel(), 500, 100);
     	
     }
     @Override

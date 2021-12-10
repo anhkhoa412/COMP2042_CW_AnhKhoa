@@ -6,29 +6,30 @@ import java.awt.*;
 import com.brickbreaker.controller.Brick;
 import com.brickbreaker.controller.Wall;
 
+/** 
+ * Class of the level 
+ * */
+
 public class Level {
 
+	/** Counting level */
     private static final int LEVELS_COUNT = 5;
 
     private static final int CLAY = 1;
     private static final int STEEL = 2;
     private static final int CEMENT = 3;
-    private static final int SLOW = 4;
-    private static final int SPECIAL = 5;
 
     private Brick[][] levels;
     private int level;
-    
-    public static Wall getWall() {
-    	return wall;
-    }
 
     private static Wall wall;
-
+    
+    /** Level constructor */
     public Level(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Wall wall){
         levels = makeLevels(drawArea,brickCount,lineCount,brickDimensionRatio);
         level = 0;
         this.wall = wall;
+        
     }
 
     private Brick[] makeSingleTypeLevel(Rectangle drawArea, int brickCnt, int lineCnt, double brickSizeRatio, int type){
@@ -122,9 +123,11 @@ public class Level {
         tmp[1] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,CEMENT);
         tmp[2] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,STEEL);
         tmp[3] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,STEEL,CEMENT);
-
+        tmp[4] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CEMENT,CEMENT);
         return tmp;
     }
+    
+    
 
     private Brick makeBrick(Point point, Dimension size, int type){
         Brick out;
@@ -158,4 +161,6 @@ public class Level {
     public int getLevel(){
         return level;
     }
-}
+  
+    }
+

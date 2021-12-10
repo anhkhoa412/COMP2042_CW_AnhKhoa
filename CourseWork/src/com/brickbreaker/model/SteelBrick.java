@@ -23,33 +23,39 @@ import java.util.Random;
 
 import com.brickbreaker.controller.Brick;
 
-
+/**
+ * class for StealBrick object
+ *
+ */
 public class SteelBrick extends Brick {
 
+	/** name of the brick */
     private static final String NAME = "Steel Brick";
+    /** color of the brick */
     private static final Color DEF_INNER = new Color(203, 203, 201);
     private static final Color DEF_BORDER = Color.BLACK;
+    /** strength of the brick */
     private static final int STEEL_STRENGTH = 1;
+    /** The chances to crack thí brick */
     private static final double STEEL_PROBABILITY = 0.4;
 
     private Random rnd;
     private Shape brickFace;
 
+    /** constructor of the steal brick */
     public SteelBrick(Point point, Dimension size){
         super(NAME,point,size,DEF_BORDER,DEF_INNER,STEEL_STRENGTH);
         rnd = new Random();
         brickFace = super.brickFace;
     }
 
-
+    /**Method from parent abstract class
+	 * shape of object
+	 * Collision of object
+	 */
     @Override
     protected Shape makeBrickFace(Point pos, Dimension size) {
         return new Rectangle(pos,size);
-    }
-
-    @Override
-    public Shape getBrick() {
-        return brickFace;
     }
 
     public  boolean setImpact(Point2D point , int dir){
@@ -63,6 +69,10 @@ public class SteelBrick extends Brick {
         if(rnd.nextDouble() < STEEL_PROBABILITY){
             super.impact();
         }
+    }
+    @Override
+    public Shape getBrick() {
+        return brickFace;
     }
 
 }

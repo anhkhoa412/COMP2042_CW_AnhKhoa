@@ -20,7 +20,9 @@ package com.brickbreaker.model;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-
+/**
+ * Class of object RubberBall  
+ */
 public class RubberBall extends Ball {
 
 

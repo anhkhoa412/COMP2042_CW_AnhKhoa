@@ -35,11 +35,12 @@ public class Player {
     private int moveAmount;
     private int min;
     private int max;
+    private int width;
     private String name;
     private int score;
+    private Level level;
 
-
-    public Player(Point ballPoint,int width,int height,Rectangle container,String name, int score) {
+    public Player(Point ballPoint, int width, int height,Rectangle container,String name, int score) {
         this.ballPoint = ballPoint;
         moveAmount = 0;
         playerFace = makeRectangle(width, height);
@@ -94,6 +95,16 @@ public class Player {
 	}
 	public void setScore(int score) {
 		this.score = score;
+	}
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	public int getWidth() {
+		width = 500;
+		return width;
+	}
+	public void smallWidth() {
+		setWidth(getWidth() /2);
 	}
 	public String getName() {
 		return name;

@@ -22,6 +22,7 @@ import javax.swing.*;
 import com.brickbreaker.controller.GameBoard;
 import com.brickbreaker.controller.Wall;
 import com.brickbreaker.model.Ball;
+import com.brickbreaker.model.Level;
 
 import java.awt.*;
 import java.awt.event.WindowEvent;
@@ -38,14 +39,18 @@ public class DebugConsole extends JDialog implements WindowListener{
     private Wall wall;
 
 
-    public DebugConsole(JFrame owner,Wall wall,GameBoard gameBoard){
+	private Level level;
+
+
+    public DebugConsole(JFrame owner,Wall wall,GameBoard gameBoard, Level level){
 
         this.wall = wall;
         this.owner = owner;
         this.gameBoard = gameBoard;
+        this.level = level;
         initialize();
 
-        debugPanel = new DebugPanel(wall);
+        debugPanel = new DebugPanel(wall, level);
         this.add(debugPanel,BorderLayout.CENTER);
 
 

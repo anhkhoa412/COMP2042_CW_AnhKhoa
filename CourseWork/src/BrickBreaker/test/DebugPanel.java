@@ -21,7 +21,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeListener;
 
 import com.brickbreaker.controller.Wall;
-import com.brickbreaker.model.levels;
+import com.brickbreaker.model.Level;
+
 
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -44,11 +45,12 @@ public class DebugPanel extends JPanel {
     private JSlider ballYSpeed;
 
     private Wall wall;
-    private levels level;
+    private Level level;
 
-    public DebugPanel(Wall wall){
+    public DebugPanel(Wall wall, Level level){
 
         this.wall = wall;
+        this.level = level;
 
         initialize();
 

@@ -34,7 +34,7 @@ import com.brickbreaker.model.CementBrick;
 import com.brickbreaker.model.ClayBrick;
 import com.brickbreaker.model.Player;
 import com.brickbreaker.model.RubberBall;
-import com.brickbreaker.model.Score;
+
 import com.brickbreaker.model.SteelBrick;
 
 public class Wall {
@@ -54,7 +54,7 @@ public class Wall {
 	private int brickCount;
 	private int ballCount;
 	private boolean ballLost;
-	public Score score;
+	private int length = 150;
 
 	private String highScore = "Nobody:0";
 
@@ -78,9 +78,10 @@ public class Wall {
 
 		ball.setSpeed(speedX, speedY);
 
-		player = new Player((Point) ballPos.clone(), 150, 10, drawArea, null, 0);
-
+		player = new Player((Point) ballPos.clone(), setlength(), 10, drawArea, null, 0);
+		this.length = length;
 		area = drawArea;
+		
 
 	}
 
@@ -90,7 +91,6 @@ public class Wall {
 
 	public void checkLevels() {
 		if (level == 1) {
-
 		}
 
 	}
@@ -192,15 +192,6 @@ public class Wall {
 		return brickCount == 0;
 	}
 
-	public void nextLevel() {
-		bricks = levels[level++];
-		this.brickCount = bricks.length;
-	}
-
-	public boolean hasLevel() {
-		return level < levels.length;
-	}
-
 	public void setBallXSpeed(int s) {
 		ball.setXSpeed(s);
 	}
@@ -286,11 +277,6 @@ public class Wall {
 		this.highScore = highScore;
 	}
 
-	public int getlevel() {
-		// TODO Auto-generated method stub
-		return level;
-	}
-
 	public Brick[] getBricks() {
 		return bricks;
 	}
@@ -301,6 +287,18 @@ public class Wall {
 
 	public void setBrickCount(int brickCount) {
 		this.brickCount = brickCount;
+	}
+	public int levelup() {
+		this.length = length/2;
+		return length;
+	}
+	public int getlength() {
+		return length;
+	}
+	public int setlength() {
+		
+		this.length = getlength() / 2;
+		return length;
 	}
 	
 
