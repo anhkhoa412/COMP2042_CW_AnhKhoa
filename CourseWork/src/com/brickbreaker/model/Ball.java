@@ -5,7 +5,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.RectangularShape;
 
 /**
- * Class for ball object
+ * Abstract class for ball object
  *
  */
 abstract public class Ball {
@@ -28,7 +28,10 @@ abstract public class Ball {
     private int speedX;
     private int speedY;
 
-    /** Constructor of ball */
+    /** Constructor of ball 
+     * Sets the center of the ball
+     * Visualize the ball
+     * */
     public Ball(Point2D center,int radiusA,int radiusB,Color inner,Color border){
         this.center = center;
 

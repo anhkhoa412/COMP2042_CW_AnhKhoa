@@ -38,6 +38,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     private static final String RESTART = "Restart";
     private static final String EXIT = "Exit";
     private static final String PAUSE = "Pause Menu";
+    private static final String MUSIC = "Music";
     private static final int TEXT_SIZE = 30;
     private static final Color MENU_COLOR = new Color(0,255,0);
 
@@ -60,6 +61,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     private Rectangle continueButtonRect;
     private Rectangle exitButtonRect;
     private Rectangle restartButtonRect;
+    private Rectangle musicButtonRect;
     private int strLen;
 
     private DebugConsole debugConsole;
@@ -70,6 +72,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     private Level level;
     
     Sound sound = new Sound();
+    private boolean check;
     
 
     public GameBoard(JFrame owner){
@@ -271,7 +274,14 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
             continueButtonRect = menuFont.getStringBounds(CONTINUE,frc).getBounds();
             continueButtonRect.setLocation(x,y-continueButtonRect.height);
         }
+        g2d.drawString(MUSIC,450,y);
+       
+        if(musicButtonRect == null){
+            musicButtonRect = (Rectangle) continueButtonRect.clone();
+            musicButtonRect.setLocation(450,y-10);
+        }
 
+       
         g2d.drawString(CONTINUE,x,y);
 
         y *= 2;
@@ -291,9 +301,6 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         }
 
         g2d.drawString(EXIT,x,y);
-
-
-
         g2d.setFont(tmpFont);
         g2d.setColor(tmpColor);
     }
@@ -347,13 +354,24 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     	sound.setFile(i);
     	sound.play();
     	sound.loop();
+    	check = true;
     }
     public void stopMusic() {
     	sound.stop();
+    	check = false;
     }
     public void playSE(int i) {
     	sound.setFile(i);
     	sound.play();
+    }
+    public boolean checkMusic() {
+		if (check == true) {
+			stopMusic();
+		}else if(check == false) {
+			playMusic(0);
+		}
+    	return showPauseMenu;
+    	
     }
 
     @Override
@@ -379,6 +397,10 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         }
         else if(exitButtonRect.contains(p)){
             System.exit(0);
+        }
+        else if(musicButtonRect.contains(p)) {
+        	checkMusic();
+        	repaint();
         }
 
     }
@@ -412,7 +434,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     public void mouseMoved(MouseEvent mouseEvent) {
         Point p = mouseEvent.getPoint();
         if(exitButtonRect != null && showPauseMenu) {
-            if (exitButtonRect.contains(p) || continueButtonRect.contains(p) || restartButtonRect.contains(p))
+            if (exitButtonRect.contains(p) || continueButtonRect.contains(p) || restartButtonRect.contains(p) || musicButtonRect.contains(p))
                 this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             else
                 this.setCursor(Cursor.getDefaultCursor());
