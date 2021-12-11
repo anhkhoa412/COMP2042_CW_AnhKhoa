@@ -37,6 +37,9 @@ import com.brickbreaker.model.RubberBall;
 
 import com.brickbreaker.model.SteelBrick;
 
+/** 
+ * Class of wall
+ * */
 public class Wall {
 
 
@@ -58,6 +61,11 @@ public class Wall {
 
 	private String highScore = "Nobody:0";
 
+	/** Constructor of class wall. 
+	 * @param position of ball, 
+	 * @param  number of ball, 
+	 * @param  speed of ball 
+	 * @param create player */
 	public Wall(Rectangle drawArea,  Point ballPos) {
 
 		this.startPoint = new Point(ballPos);
@@ -84,7 +92,7 @@ public class Wall {
 		
 
 	}
-
+	/* creates a ball */
 	private void makeBall(Point2D ballPos) {
 		ball = new RubberBall(ballPos);
 	}
@@ -95,11 +103,13 @@ public class Wall {
 
 	}
 
+	/** Call method move in player and ball */
 	public void move() {
 		player.move();
 		ball.move();
 	}
-
+	
+	/** check the collision for ball and player, ball and any bircks, all and wall */
 	public void findImpacts() {
 		if (player.impact(ball)) {
 			ball.reverseY();
@@ -121,7 +131,7 @@ public class Wall {
 			ballLost = true;
 		}
 	}
-
+	/** Bricks will crack when ball hit in any directions */
 	private boolean impactWall() {
 		for (Brick b : bricks) {
 			switch (b.findImpact(ball)) {
@@ -144,24 +154,24 @@ public class Wall {
 		}
 		return false;
 	}
-
+	/** When ball hit the border */
 	private boolean impactBorder() {
 		Point2D p = ball.getPosition();
 		return ((p.getX() < area.getX()) || (p.getX() > (area.getX() + area.getWidth())));
 	}
-
+	/** Count the brick left */
 	public int getBrickCount() {
 		return brickCount;
 	}
-
+	/** Count the ball left */
 	public int getBallCount() {
 		return ballCount;
 	}
-
+	/** Check lose ball */
 	public boolean isBallLost() {
 		return ballLost;
 	}
-
+	/** Reset the ball when lose ball */
 	public void ballReset() {
 		player.moveTo(startPoint);
 		ball.moveTo(startPoint);
@@ -176,18 +186,19 @@ public class Wall {
 		ball.setSpeed(speedX, speedY);
 		ballLost = false;
 	}
-
+	
+	/** Reset the number of bricks and balls*/
 	public void wallReset() {
 		for (Brick b : bricks)
 			b.repair();
 		brickCount = bricks.length;
 		ballCount = 3;
 	}
-
+	/** No balls left */
 	public boolean ballEnd() {
 		return ballCount == 0;
 	}
-
+	/** No bricks left */
 	public boolean isDone() {
 		return brickCount == 0;
 	}
@@ -199,17 +210,17 @@ public class Wall {
 	public void setBallYSpeed(int s) {
 		ball.setYSpeed(s);
 	}
-
+	/** Reset number of balls*/
 	public void resetBallCount() {
 		ballCount = 3;
 	}
 
-	// count score
+	/** count player's score */
 	public int countScore() {
 		return player.getScore();
 	}
 
-	// get highscore
+	/** Read the high score file */
 	public String GetHighScore() {
 		// format: Khoa: 100
 		FileReader readFile = null;
@@ -229,7 +240,7 @@ public class Wall {
 			}
 		}
 	}
-
+	/** Check score and write in file */
 	public void CheckScore() {
 		if (player.getScore() > Integer.parseInt((highScore.split(":")[1]))) {
 
@@ -264,11 +275,11 @@ public class Wall {
 			}
 		}
 	}
-
+	/** Check the previous high score */
 	public int checkpreviosscore() {
 		return player.getScore();
 	}
-
+	/** Get player's highScore */
 	public String getHighScore() {
 		return highScore;
 	}

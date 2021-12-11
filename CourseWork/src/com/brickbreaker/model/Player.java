@@ -21,7 +21,9 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-
+/**
+ * Class of object player 
+ * */
 public class Player {
 
 
@@ -40,6 +42,13 @@ public class Player {
     private int score;
     private Level level;
 
+    /**Constructor of Player
+     * Create ball position 
+     * width and height of paddle
+     * Shape of the paddle 
+     * Name of the player 
+     * setScore of the player
+     *  */
     public Player(Point ballPoint, int width, int height,Rectangle container,String name, int score) {
         this.ballPoint = ballPoint;
         moveAmount = 0;
@@ -49,24 +58,31 @@ public class Player {
         this.setScore(score);
 
     }
+    /**Add player's score when break a brick */
     public void addscore() {
     	setScore(getScore() + 5);
     }
-
+    /** make paddle */
     private Rectangle makeRectangle(int width,int height){
         Point p = new Point((int)(ballPoint.getX() - (width / 2)),(int)ballPoint.getY());
         return  new Rectangle(p,new Dimension(width,height));
     }
-
+    /** Collision of the ball with paddle */
     public boolean impact(Ball b){
         return playerFace.contains(b.getPosition()) && playerFace.contains(b.down) ;
     }
-
+    /** Handle the movement of paddle 
+     * the location of the ball
+     */
     public void move(){
         double x = ballPoint.getX() + moveAmount;
         if(x < min || x > max)
             return;
         ballPoint.setLocation(x,ballPoint.getY());
+        playerFace.setLocation(ballPoint.x - (int)playerFace.getWidth()/2,ballPoint.y);
+    }
+    public void moveTo(Point p){
+        ballPoint.setLocation(p);
         playerFace.setLocation(ballPoint.x - (int)playerFace.getWidth()/2,ballPoint.y);
     }
 
@@ -86,10 +102,7 @@ public class Player {
         return  playerFace;
     }
 
-    public void moveTo(Point p){
-        ballPoint.setLocation(p);
-        playerFace.setLocation(ballPoint.x - (int)playerFace.getWidth()/2,ballPoint.y);
-    }
+
 	public int getScore() {
 		return score;
 	}

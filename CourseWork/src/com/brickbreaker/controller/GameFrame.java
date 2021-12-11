@@ -19,6 +19,7 @@ package com.brickbreaker.controller;
 
 import javax.swing.*;
 
+import com.brickbreaker.view.GameView;
 import com.brickbreaker.view.HomeMenu;
 
 import java.awt.*;
@@ -26,7 +27,9 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
-
+/** 
+ * Class of the GameFrame 
+ * */
 
 public class GameFrame extends JFrame implements WindowFocusListener {
 
@@ -36,7 +39,8 @@ public class GameFrame extends JFrame implements WindowFocusListener {
     private HomeMenu homeMenu;
 
     private boolean gaming;
-
+    
+    /** Constructor of game frame. Create GameBoard and HomeMenu */
     public GameFrame(){
         super();
 
@@ -47,6 +51,7 @@ public class GameFrame extends JFrame implements WindowFocusListener {
         gameBoard = new GameBoard(this);
 
         homeMenu = new HomeMenu(this,new Dimension(450,300));
+        
 
         this.add(homeMenu,BorderLayout.CENTER);
 
@@ -54,7 +59,7 @@ public class GameFrame extends JFrame implements WindowFocusListener {
 
 
     }
-
+    /** Visualize the game screen */
     public void initialize(){
         this.setTitle(DEF_TITLE);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -62,7 +67,7 @@ public class GameFrame extends JFrame implements WindowFocusListener {
         this.autoLocate();
         this.setVisible(true);
     }
-
+    /** Open game board and remove home menu */
     public void enableGameBoard(){
         this.dispose();
         this.remove(homeMenu);
@@ -74,6 +79,7 @@ public class GameFrame extends JFrame implements WindowFocusListener {
 
     }
 
+    /** Locate the game view on the computer's screen */
     private void autoLocate(){
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (size.width - this.getWidth()) / 2;

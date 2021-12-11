@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"CourseWork","l":"BrickBreaker.test"},{"m":"CourseWork","l":"com.brickbreaker.controller"},{"m":"CourseWork","l":"com.brickbreaker.main"},{"m":"CourseWork","l":"com.brickbreaker.model"},{"m":"CourseWork","l":"com.brickbreaker.view"}];updateSearchResults();

@@ -29,9 +29,7 @@ import BrickBreaker.test.DebugConsole;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.font.FontRenderContext;
-
-
-
+/**Class to draw a view and handle action while playing game */
 public class GameBoard extends JComponent implements KeyListener,MouseListener,MouseMotionListener {
 
     private static final String CONTINUE = "Continue";
@@ -74,7 +72,11 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     Sound sound = new Sound();
     private boolean check;
     
-
+    /** Constructor method for the GameBoard class
+     * Create View
+     * Create Music
+     * Handle the game
+     * */
     public GameBoard(JFrame owner){
         super();
 
@@ -143,7 +145,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     }
 
 
-
+    /** Visualize the view*/
     private void initialize(){
         this.setPreferredSize(new Dimension(DEF_WIDTH,DEF_HEIGHT));
         this.setFocusable(true);
@@ -154,7 +156,8 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
        
     }
 
-
+    /** Draw the game scene (player, ball, bricks)
+     * */
     public void paint(Graphics g){
     	
         Graphics2D g2d = (Graphics2D) g;
@@ -188,7 +191,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         g2d.fillRect(0,0,getWidth(),getHeight());
         g2d.setColor(tmp);
     }
-
+    /** drawBrick draws all the brick. Fill the part of the screen with bricks */
     private void drawBrick(Brick brick,Graphics2D g2d){
         Color tmp = g2d.getColor();
 
@@ -201,7 +204,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
         g2d.setColor(tmp);
     }
-
+    /** draw the main ball on screen */
     private void drawBall(Ball ball,Graphics2D g2d){
         Color tmp = g2d.getColor();
 
@@ -215,7 +218,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
         g2d.setColor(tmp);
     }
-
+    /** draw player represent by the paddle */
     private void drawPlayer(Player p,Graphics2D g2d){
         Color tmp = g2d.getColor();
         Shape s = p.getPlayerFace();
@@ -226,12 +229,12 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
         g2d.setColor(tmp);
     }
-
+    /** drawMenu is called when player hit "ESC" */
     private void drawMenu(Graphics2D g2d){
         obscureGameBoard(g2d);
         drawPauseMenu(g2d);
     }
-
+    /** the game board behind the pause menu */
     private void obscureGameBoard(Graphics2D g2d){
 
         Composite tmp = g2d.getComposite();
@@ -246,7 +249,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         g2d.setComposite(tmp);
         g2d.setColor(tmpColor);
     }
-
+    /** drawPauseMenu and all the button in pause menu */
     private void drawPauseMenu(Graphics2D g2d){
         Font tmpFont = g2d.getFont();
         Color tmpColor = g2d.getColor();
@@ -304,14 +307,14 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         g2d.setFont(tmpFont);
         g2d.setColor(tmpColor);
     }
-    //Draw Score
+    /** Draw score when player destroy a brick */
     public void drawscore(Graphics g) {
     	g.setColor(Color.green);
     	g.setFont(new Font("serif",Font.BOLD,15));
     	g.drawString("Score: "+wall.countScore(), 0, 100);
     	g.drawString("Highscore: "+wall.GetHighScore(),0,125);
     }
-    
+    /** Draw the current level */
     public void drawlevel(Graphics g) {
     	g.setColor(Color.green);
     	g.setFont(new Font("serif",Font.BOLD,15));
@@ -350,20 +353,19 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
                 wall.player.stop();
         }
     }
+    /** Play music and loop */
     public void playMusic(int i) {
     	sound.setFile(i);
     	sound.play();
     	sound.loop();
     	check = true;
     }
+    /** Stop music */
     public void stopMusic() {
     	sound.stop();
     	check = false;
     }
-    public void playSE(int i) {
-    	sound.setFile(i);
-    	sound.play();
-    }
+    /** check the music is currently playing or not */
     public boolean checkMusic() {
 		if (check == true) {
 			stopMusic();

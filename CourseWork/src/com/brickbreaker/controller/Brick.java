@@ -9,7 +9,7 @@ import java.util.Random;
 import com.brickbreaker.model.Ball;
 
 /**
- * Created by filippo on 04/09/16.
+ * Class of object brick
  *
  */
 abstract public class Brick  {
@@ -25,7 +25,7 @@ abstract public class Brick  {
     public static final int RIGHT_IMPACT = 400;
 
 
-
+    /** Class of crack */
     public class Crack{
 
         private static final int CRACK_SECTIONS = 3;
@@ -45,7 +45,9 @@ abstract public class Brick  {
         private int crackDepth;
         private int steps;
 
-
+        /** 
+         * Constructor of crack class (the crack the forms in a brick need more 1 hit)
+         * */
         public Crack(int crackDepth, int steps){
 
             crack = new GeneralPath();
@@ -55,16 +57,20 @@ abstract public class Brick  {
         }
 
 
-
+        /** crack to draw on the brick */
         public GeneralPath draw(){
 
             return crack;
         }
-
+        /** reset crack so it not appear on the brick anymore */
         public void reset(){
             crack.reset();
         }
-
+        /** make a crack on the brick 
+         * @param the point where we need to make the crack
+         * @param the direction the crack need to go
+         * */
+        
         public void makeCrack(Point2D point, int direction){
             Rectangle bounds = Brick.this.brickFace.getBounds();
 
@@ -105,6 +111,10 @@ abstract public class Brick  {
             }
         }
 
+        /** make a crack on our brick 
+         * @param the starting point of the brick
+         * @param end the ending point of the brick
+         * */
         protected void makeCrack(Point start, Point end){
 
             GeneralPath path = new GeneralPath();
@@ -189,7 +199,13 @@ abstract public class Brick  {
 
     private boolean broken;
 
-
+    /**Constructor of brick class (make brick we need to the game)
+     *  @param of the prick 
+     * @param size of the brick
+     *  @param color of the border of the brick
+     *  @param of the brick
+     *  @param color of the brick
+     */
     public Brick(String name, Point pos,Dimension size,Color border,Color inner,int strength){
         rnd = new Random();
         broken = false;
@@ -200,9 +216,10 @@ abstract public class Brick  {
         this.fullStrength = this.strength = strength;
 
     }
-
+    /**parent method to make the visual aspect of the bridge  */
     protected abstract Shape makeBrickFace(Point pos,Dimension size);
 
+    /** this method is called when a brick collision has occured */
     public  boolean setImpact(Point2D point , int dir){
         if(broken)
             return false;
@@ -210,19 +227,20 @@ abstract public class Brick  {
         return  broken;
     }
 
+    /** parents method to get the brick */
     public abstract Shape getBrick();
 
 
-
+    /** get border color of the brick so it can be draw on the scene */
     public Color getBorderColor(){
         return  border;
     }
-
+    /** get border color of the brick so it can be draw on the scene */
     public Color getInnerColor(){
         return inner;
     }
 
-
+    /** check the collision of a ball and bricks */
     public final int findImpact(Ball b){
         if(broken)
             return 0;
@@ -237,16 +255,16 @@ abstract public class Brick  {
             out = UP_IMPACT;
         return out;
     }
-
+    /** Is the brick broken or not? */
     public final boolean isBroken(){
         return broken;
     }
-
+    /** fix broken brick and return to there full strength */
     public void repair() {
         broken = false;
         strength = fullStrength;
     }
-
+    /** impact is called whenever a collision happened, reduce the strength of the brick, break when the strength is 0  */
     public void impact(){
         strength--;
         broken = (strength == 0);
