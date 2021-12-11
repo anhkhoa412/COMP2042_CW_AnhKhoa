@@ -19,7 +19,6 @@ package com.brickbreaker.controller;
 
 import javax.swing.*;
 
-import com.brickbreaker.view.GameView;
 import com.brickbreaker.view.HomeMenu;
 
 import java.awt.*;

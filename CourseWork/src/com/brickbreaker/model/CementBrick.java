@@ -36,7 +36,7 @@ public class CementBrick extends Brick {
 	 */
 
     @Override
-    protected Shape makeBrickFace(Point pos, Dimension size) {
+    public Shape makeBrickFace(Point pos, Dimension size) {
         return new Rectangle(pos,size);
     }
 
@@ -56,6 +56,7 @@ public class CementBrick extends Brick {
 
     @Override
     public Shape getBrick() {
+
         return brickFace;
     }
 
