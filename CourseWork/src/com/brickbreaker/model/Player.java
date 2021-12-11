@@ -43,10 +43,10 @@ public class Player {
     private Level level;
 
     /**Constructor of Player
-     * Create ball position 
+     * Create ball position
      * width and height of paddle
-     * Shape of the paddle 
-     * Name of the player 
+     * Shape of the paddle
+     * Name of the player
      * setScore of the player
      *  */
     public Player(Point ballPoint, int width, int height,Rectangle container,String name, int score) {

@@ -19,10 +19,7 @@ package com.brickbreaker.controller;
 
 import javax.swing.*;
 
-import com.brickbreaker.model.Ball;
-import com.brickbreaker.model.Level;
-import com.brickbreaker.model.Player;
-import com.brickbreaker.model.Sound;
+import com.brickbreaker.model.*;
 
 
 import BrickBreaker.test.DebugConsole;
@@ -47,6 +44,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     private static final Color BG_COLOR = Color.WHITE;
 
     private Timer gameTimer;
+
 
     private Wall wall;
 
@@ -107,7 +105,8 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         gameTimer = new Timer(10,e ->{
             wall.move();
             wall.findImpacts();
-            message = String.format("Bricks: %d Balls %d",wall.getBrickCount(),wall.getBallCount());
+            message = String.format("Bricks: %d Balls %d ",wall.getBrickCount(),wall.getBallCount());
+
             if(wall.isBallLost()){
                 if(wall.ballEnd()){
                     wall.wallReset();

@@ -30,12 +30,8 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 import com.brickbreaker.model.Ball;
-import com.brickbreaker.model.CementBrick;
-import com.brickbreaker.model.ClayBrick;
 import com.brickbreaker.model.Player;
 import com.brickbreaker.model.RubberBall;
-
-import com.brickbreaker.model.SteelBrick;
 
 /** 
  * Class of wall
@@ -61,10 +57,10 @@ public class Wall {
 
 	private String highScore = "Nobody:0";
 
-	/** Constructor of class wall. 
-	 * @param position of ball, 
-	 * @param  number of ball, 
-	 * @param  speed of ball 
+	/** Constructor of class wall.
+	 * @param position of ball,
+	 * @param  number of ball,
+	 * @param  speed of ball
 	 * @param create player */
 	public Wall(Rectangle drawArea,  Point ballPos) {
 
@@ -74,6 +70,7 @@ public class Wall {
 		ballLost = false;
 
 		rnd = new Random();
+
 
 		makeBall(ballPos);
 		int speedX, speedY;
@@ -85,11 +82,11 @@ public class Wall {
 		} while (speedY == 0);
 
 		ball.setSpeed(speedX, speedY);
-
+		randomPaddle();
 		player = new Player((Point) ballPos.clone(), setlength(), 10, drawArea, null, 0);
 		this.length = length;
 		area = drawArea;
-		
+
 
 	}
 	/* creates a ball */
@@ -108,7 +105,7 @@ public class Wall {
 		player.move();
 		ball.move();
 	}
-	
+
 	/** check the collision for ball and player, ball and any bircks, all and wall */
 	public void findImpacts() {
 		if (player.impact(ball)) {
@@ -186,7 +183,7 @@ public class Wall {
 		ball.setSpeed(speedX, speedY);
 		ballLost = false;
 	}
-	
+
 	/** Reset the number of bricks and balls*/
 	public void wallReset() {
 		for (Brick b : bricks)
@@ -307,10 +304,27 @@ public class Wall {
 		return length;
 	}
 	public int setlength() {
-		
-		this.length = getlength() / 2;
+		this.length = getlength() ;
 		return length;
 	}
-	
+	public int setSlength(){
+		this.length = getlength() /2;
+		return length;
+	}
+	public int setSslength(){
+		this.length = getlength() /4;
+		return length;
+	}
+	public int randomPaddle(){
+		Integer number = Integer.valueOf(rnd.nextInt(3));
+		if (number.intValue() == 0){
+			setlength();
+			System.out.println("Value:"+number.intValue());
+		}else if (number.intValue() == 2){
+			setSslength();
+			System.out.println("Value:"+number.intValue());
+		}
+		return length;
+	}
 
 }
