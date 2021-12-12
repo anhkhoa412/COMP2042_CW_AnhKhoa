@@ -24,7 +24,7 @@ Enjoy ;-)
   For examples, class Wall is responsible for the creation of player and level. In this source code, Lelel has been broken up to specific Level class.
  
  #### Added new Classes 
-   Added new classes to increase the modularity or add features of the program. For examples, Classes like sound is a class which specifically in chare of the sound.
+   Added new classes to increase the modularity or add features of the program. For examples, Classes like sound is a class which specifically in charge of the sound.
  
 ## Additions 
   #### Additional screen Info
@@ -33,9 +33,9 @@ Enjoy ;-)
    Created a new level that can use 3 types of bricks.
   #### Additional fortune.
    In this game, when user start the game there will be ea random number form 0 to 2.
-         _ If the number is 0, the user will have full length of the paddle.
-         _ 1 -> 1/2 paddle.
-         _ 2 -> 1/4 paddle.
+      If the number is 0, the user will have full length of the paddle.
+      1 -> 1/2 paddle.
+      2 -> 1/4 paddle.
   #### Simple feature
    Created a sound feature. Its a game theme and can be turned on or off in the pause menu.
   #### SaveScore _ HighScore
