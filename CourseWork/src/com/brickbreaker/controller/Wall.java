@@ -239,6 +239,7 @@ public class Wall {
 	}
 	/** Check score and write in file */
 	public void CheckScore() {
+		getHighScore();
 		if (player.getScore() > Integer.parseInt((highScore.split(":")[1]))) {
 
 			String name = JOptionPane.showInputDialog("You set a new highScore. What your name?");
@@ -256,9 +257,8 @@ public class Wall {
 			FileWriter writeFile = null;
 			BufferedWriter writer = null;
 			try {
-				writeFile = new FileWriter(scoreFile, true);
+				writeFile = new FileWriter(scoreFile);
 				writer = new BufferedWriter(writeFile);
-				writer.newLine();
 				writer.write(this.highScore);
 			} catch (Exception e) {
 
@@ -272,10 +272,7 @@ public class Wall {
 			}
 		}
 	}
-	/** Check the previous high score */
-	public int checkpreviosscore() {
-		return player.getScore();
-	}
+
 	/** Get player's highScore */
 	public String getHighScore() {
 		return highScore;

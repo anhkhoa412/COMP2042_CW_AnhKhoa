@@ -103,7 +103,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
 
 		menuFace = new Rectangle(new Point(0, 0), area);
 		/** Get background */
-		background = new ImageIcon("C:\\Users\\vungu\\eclipse-workspace\\CourseWork\\src\\bbicon.png").getImage();
+		background = new ImageIcon("resources/picture/bbicon.png").getImage();
 		this.setPreferredSize(area);
 
 		Dimension btnDim = new Dimension(area.width / 4, area.height / 8);

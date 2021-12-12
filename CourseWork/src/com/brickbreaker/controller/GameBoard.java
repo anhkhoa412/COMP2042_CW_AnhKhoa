@@ -308,14 +308,14 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     }
     /** Draw score when player destroy a brick */
     public void drawscore(Graphics g) {
-    	g.setColor(Color.green);
-    	g.setFont(new Font("serif",Font.BOLD,15));
+    	g.setColor(Color.orange);
+    	g.setFont(new Font("serif",Font.BOLD,20));
     	g.drawString("Score: "+wall.countScore(), 0, 100);
     	g.drawString("Highscore: "+wall.GetHighScore(),0,125);
     }
     /** Draw the current level */
     public void drawlevel(Graphics g) {
-    	g.setColor(Color.green);
+    	g.setColor(Color.orange);
     	g.setFont(new Font("serif",Font.BOLD,15));
     	g.drawString("Level: "+level.getLevel(), 500, 100);
     	
