@@ -18,7 +18,7 @@ Enjoy ;-)
   Separated all resoureces like sounds and images away from the source codes.
  #### Meaningful package nameing _ MVC
   I create packages namely: controller, view, model, test. Put in those packages class that satisfy the name.
-  For example, all the model like: CementBrick; StealBrick; and ClayBrick is in the model class represented for the object and be handled by Brick class in controller packages.
+  For example, all the object like: CementBrick; StealBrick; and ClayBrick is in the model class represented for the object and be handled by Brick class in controller packages.
 #### Breaking and Cleaning up Classes 
   Some classes from source codes were bronken up to differen classes. This is to make the classes to follow the Single Responsibility Principle.
   For examples, class Wall is responsible for the creation of player and level. In this source code, Lelel has been broken up to specific Level class.
