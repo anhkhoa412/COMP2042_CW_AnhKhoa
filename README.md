@@ -12,7 +12,7 @@ the game automatically pause if the frame loses focus
 
 Enjoy ;-)
 
-#Refactory
+##Refactory
 
  #### Organising Files 
        Separated all resoureces like sounds and images away from the source codes.
@@ -26,7 +26,7 @@ Enjoy ;-)
  #### Added new Classes 
         Added new classes to increase the modularity or add features of the program. For examples, Classes like sound is a class which specifically in chare of the sound.
  
-# Additions 
+## Additions 
   #### Additional screen Info
       In the home menu when starting the game, user can click start button to play the game, info button to learn instructions, and exit to quit the game.
   #### Additioinal levels 
