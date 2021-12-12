@@ -35,7 +35,7 @@ Enjoy ;-)
    In this game, when user start the game there will be a random number (0, 1, 2).
       If the number is 0, the user will have full length of the paddle.
       1 -> 1/2 paddle.
-      2 -> 1/4 paddle.
+      2 -> 1/4 paddle. I added this method in wall class.
   #### Simple feature
    Created a sound feature. It's a game theme and can be turned on or off in the pause menu.
   #### SaveScore _ HighScore
